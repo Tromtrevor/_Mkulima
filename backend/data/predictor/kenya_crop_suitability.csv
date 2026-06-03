@@ -1,0 +1,6 @@
+crop_name,category,temperature_min,temperature_max,rainfall_min,rainfall_max,altitude_min,altitude_max,ph_min,ph_max,soil_types,drought_tolerant,pest_resistant,availability,suitability_percent,notes,source
+Maize,Cereals,12,35,350,700,0,1500,5.0,8.0,"Loam, Clay Loam, Clay",Yes,Yes,Readily available,98,"Performs well under moderate rainfall, drought and pest tolerant","KALRO, FAO Kenya"
+Beans,Legumes,15,28,400,1200,1000,2100,5.5,7.5,"Loam, Sandy Loam",Moderate,Moderate,Widely available,90,"Thrives in well-drained soils, sensitive to waterlogging","KALRO, FAO Kenya"
+Sorghum,Cereals,20,35,300,600,0,1800,5.0,8.5,"Loam, Sandy, Clay Loam",High,High,Readily available,95,"Ideal for dry areas, tolerant to drought and poor soils","KALRO, ICRISAT"
+Potatoes,Root Crop,10,24,850,1400,1500,2700,5.0,6.5,"Well-drained Loam, Sandy Loam",Low,Moderate,Seasonally available,88,"Prefers cool highland areas, requires consistent moisture","KALRO, CIP Kenya"
+Rice,Cereal,20,35,1000,2000,0,1500,5.5,7.0,"Clay, Silty Clay Loam",Low,Moderate,Readily available,92,"Requires high water and warm temperatures, thrives in flooded soils","KALRO, IRRI Kenya"
