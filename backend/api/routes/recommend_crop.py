@@ -2,10 +2,10 @@
 from fastapi import APIRouter, HTTPException, status
 from pydantic import BaseModel, Field
 from typing import Optional, List, Dict
-from ...current_data.current_data import fetch_realtime_data
-from ...profit_calculation.profit_calc import calculate_profit, CROP_DATA
-from ...mkulima_ai.insight_generator import generate_crop_insight
-from ...mkulima_ai.chatbot import chatbot
+from current_data.current_data import fetch_realtime_data
+from profit_calculation.profit_calc import calculate_profit, CROP_DATA
+from mkulima_ai.insight_generator import generate_crop_insight
+from mkulima_ai.chatbot import chatbot
 import joblib
 import pandas as pd
 import geopandas as gpd
