@@ -5,7 +5,7 @@ requests
 pandas
 numpy
 joblib
-scikit-learn
+scikit-learn==1.7.2
 geopandas
 shapely
 fiona
@@ -13,3 +13,4 @@ pyproj
 rtree
 python-dotenv
 groq
+xgboost
