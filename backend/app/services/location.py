@@ -2,7 +2,7 @@
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 
-def get_farm_location(farm_id: int, db: Session):
+def fetch_farm_location(farm_id: int, db: Session):
 
     query = text("""
         SELECT

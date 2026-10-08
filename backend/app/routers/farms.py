@@ -1,11 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy import text
 from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.models.farm import Farm
 from app.schemas.farm import FarmResponse
-from app.services.location import get_farm_location as fetch_farm_location
+from app.services.location import fetch_farm_location
 from app.services.nasa_power import get_daily_weather
 
 
