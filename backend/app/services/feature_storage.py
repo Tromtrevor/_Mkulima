@@ -1,26 +1,47 @@
 from datetime import date
 
+from sqlalchemy import text
 from sqlalchemy.orm import Session
-
-from app.models.farm_feature import FarmFeature
 
 
 def save_weather_features(
     db: Session,
     farm_id: int,
-    rainfall_mm: float,
-    temperature: float,
-    observation_date: date
+    cycle_id: int,
+    observation_date: date,
+    features: dict
 ):
-    feature = FarmFeature(
-        farm_id=farm_id,
-        rainfall_mm=rainfall_mm,
-        temperature=temperature,
-        observation_date=observation_date
+
+    query = text("""
+        INSERT INTO farm_features (
+            farm_id,
+            cycle_id,
+            rainfall_mm,
+            temperature,
+            observation_date
+        )
+        VALUES (
+            :farm_id,
+            :cycle_id,
+            :rainfall_mm,
+            :temperature,
+            :observation_date
+        )
+        RETURNING feature_id
+    """)
+
+    result = db.execute(
+        query,
+        {
+            "farm_id": farm_id,
+            "cycle_id": cycle_id,
+            "rainfall_mm": features["rainfall_mm"],
+            "temperature": features["temperature_mean_c"],
+            "observation_date": observation_date
+        }
     )
 
-    db.add(feature)
+    feature_id = result.scalar_one()
     db.commit()
-    db.refresh(feature)
 
-    return feature
+    return feature_id

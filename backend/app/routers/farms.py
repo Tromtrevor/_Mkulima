@@ -1,5 +1,6 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
+from datetime import date
 
 from app.database import get_db
 from app.models.farm import Farm
@@ -8,6 +9,7 @@ from app.services.location import fetch_farm_location
 from app.services.nasa_power import get_daily_weather
 from app.services.feature_extraction import extract_weather_features
 from app.services.crop_cycle import fetch_crop_cycle
+from app.services.feature_storage import save_weather_features
 
 router = APIRouter(
     prefix="/farms",
@@ -39,7 +41,13 @@ def get_farm_location(farm_id: int, db: Session = Depends(get_db)):
     return location
 
 @router.get("/{farm_id}/cycles/{cycle_id}/weather")
-def get_crop_cycle_weather(farm_id: int, cycle_id: int, db: Session = Depends(get_db)   ):
+def get_crop_cycle_weather(
+    farm_id: int,
+    cycle_id: int,
+    db: Session = Depends(get_db),
+    observation_date: date = Query(..., description="Date of observation in YYYY-MM-DD format")
+):
+    
     location = fetch_farm_location(
         farm_id=farm_id,
         db=db
@@ -72,12 +80,21 @@ def get_crop_cycle_weather(farm_id: int, cycle_id: int, db: Session = Depends(ge
         latitude=location["latitude"],
         longitude=location["longitude"],
         start_date=cycle["planting_date"].strftime("%Y%m%d"),
-        end_date=cycle["harvest_date"].strftime("%Y%m%d")
+        end_date=observation_date.strftime("%Y%m%d")
     )
 
     features = extract_weather_features(weather)
 
+    feature_id = save_weather_features(
+        db=db,
+        farm_id=farm_id,
+        cycle_id=cycle_id,
+        observation_date=observation_date,
+        features=features
+    )
+
     return {
+        "feature_id": feature_id,
         "farm_id": farm_id,
         "cycle_id": cycle_id,
         "planting_date": cycle["planting_date"],
