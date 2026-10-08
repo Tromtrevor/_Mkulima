@@ -7,7 +7,7 @@ from app.schemas.farm import FarmResponse
 from app.services.location import fetch_farm_location
 from app.services.nasa_power import get_daily_weather
 from app.services.feature_extraction import extract_weather_features
-
+from app.services.crop_cycle import fetch_crop_cycle
 
 router = APIRouter(
     prefix="/farms",
@@ -38,10 +38,12 @@ def get_farm_location(farm_id: int, db: Session = Depends(get_db)):
 
     return location
 
-@router.get("/{farm_id}/weather")
-def get_farm_weather(farm_id: int, db: Session = Depends(get_db)):
-
-    location = fetch_farm_location(farm_id=farm_id, db=db)
+@router.get("/{farm_id}/cycles/{cycle_id}/weather")
+def get_crop_cycle_weather(farm_id: int, cycle_id: int, db: Session = Depends(get_db)   ):
+    location = fetch_farm_location(
+        farm_id=farm_id,
+        db=db
+    )
 
     if not location:
         raise HTTPException(
@@ -49,19 +51,36 @@ def get_farm_weather(farm_id: int, db: Session = Depends(get_db)):
             detail="Farm location not found"
         )
 
+    cycle = fetch_crop_cycle(
+        db=db,
+        cycle_id=cycle_id
+    )
+
+    if not cycle:
+        raise HTTPException(
+            status_code=404,
+            detail="Crop cycle not found"
+        )
+
+    if cycle["farm_id"] != farm_id:
+        raise HTTPException(
+            status_code=400,
+            detail="Crop cycle does not belong to this farm"
+        )
+
     weather = get_daily_weather(
         latitude=location["latitude"],
         longitude=location["longitude"],
-        start_date="20260301",
-        end_date="20260331"
+        start_date=cycle["planting_date"].strftime("%Y%m%d"),
+        end_date=cycle["harvest_date"].strftime("%Y%m%d")
     )
 
     features = extract_weather_features(weather)
 
     return {
-        "farm_id": location["farm_id"],
-        "farm_name": location["farm_name"],
-        "latitude": location["latitude"],
-        "longitude": location["longitude"],
-        "weather": features
+        "farm_id": farm_id,
+        "cycle_id": cycle_id,
+        "planting_date": cycle["planting_date"],
+        "harvest_date": cycle["harvest_date"],
+        "features": features
     }
