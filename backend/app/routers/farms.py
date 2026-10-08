@@ -6,6 +6,7 @@ from app.models.farm import Farm
 from app.schemas.farm import FarmResponse
 from app.services.location import fetch_farm_location
 from app.services.nasa_power import get_daily_weather
+from app.services.feature_extraction import extract_weather_features
 
 
 router = APIRouter(
@@ -55,10 +56,12 @@ def get_farm_weather(farm_id: int, db: Session = Depends(get_db)):
         end_date="20260331"
     )
 
+    features = extract_weather_features(weather)
+
     return {
         "farm_id": location["farm_id"],
         "farm_name": location["farm_name"],
         "latitude": location["latitude"],
         "longitude": location["longitude"],
-        "weather": weather
+        "weather": features
     }
