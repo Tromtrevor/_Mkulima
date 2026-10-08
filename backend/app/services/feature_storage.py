@@ -27,21 +27,30 @@ def save_weather_features(
             :temperature,
             :observation_date
         )
+        ON CONFLICT (cycle_id, observation_date)
+        DO UPDATE SET
+            rainfall_mm = EXCLUDED.rainfall_mm,
+            temperature = EXCLUDED.temperature
         RETURNING feature_id
     """)
 
-    result = db.execute(
-        query,
-        {
-            "farm_id": farm_id,
-            "cycle_id": cycle_id,
-            "rainfall_mm": features["rainfall_mm"],
-            "temperature": features["temperature_mean_c"],
-            "observation_date": observation_date
-        }
-    )
+    try:
+        result = db.execute(
+            query,
+            {
+                "farm_id": farm_id,
+                "cycle_id": cycle_id,
+                "rainfall_mm": features["rainfall_mm"],
+                "temperature": features["temperature_mean_c"],
+                "observation_date": observation_date
+            }
+        )
 
-    feature_id = result.scalar_one()
-    db.commit()
+        feature_id = result.scalar_one()
+        db.commit()
 
-    return feature_id
+        return feature_id
+
+    except Exception:
+        db.rollback()
+        raise

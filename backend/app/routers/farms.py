@@ -63,19 +63,41 @@ def get_crop_cycle_weather(
         db=db,
         cycle_id=cycle_id
     )
-
+    #Error handling for crop cycle
     if not cycle:
         raise HTTPException(
             status_code=404,
             detail="Crop cycle not found"
         )
-
+    #Error handling for farm_id and cycle_id mismatch
     if cycle["farm_id"] != farm_id:
         raise HTTPException(
             status_code=400,
             detail="Crop cycle does not belong to this farm"
         )
+    #Error handling for observation date
+    if observation_date > date.today():
+        raise HTTPException(
+            status_code=400,
+            detail="Observation date cannot be in the future"
+        )
+    
+    if observation_date < cycle["planting_date"]:
+        raise HTTPException(
+            status_code=400,
+            detail="Observation date cannot be before planting"
+        )
 
+    if (
+        cycle["harvest_date"] is not None
+        and observation_date > cycle["harvest_date"]
+    ):
+        raise HTTPException(
+            status_code=400,
+            detail="Observation date cannot be after harvest"
+        )
+
+    #Fetch weather data from NASA POWER API
     weather = get_daily_weather(
         latitude=location["latitude"],
         longitude=location["longitude"],
@@ -83,8 +105,10 @@ def get_crop_cycle_weather(
         end_date=observation_date.strftime("%Y%m%d")
     )
 
+    #Extract features from the weather data
     features = extract_weather_features(weather)
 
+    #Store the extracted features in the database
     feature_id = save_weather_features(
         db=db,
         farm_id=farm_id,
