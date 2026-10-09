@@ -41,8 +41,8 @@ def get_farm_location(farm_id: int, db: Session = Depends(get_db)):
 
     return location
 
-@router.get("/{farm_id}/cycles/{cycle_id}/weather")
-def get_crop_cycle_weather(
+@router.get("/{farm_id}/cycles/{cycle_id}/features")
+def get_crop_cycle_features(
     farm_id: int,
     cycle_id: int,
     db: Session = Depends(get_db),
