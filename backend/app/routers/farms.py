@@ -140,5 +140,10 @@ def get_crop_cycle_weather(
         "planting_date": cycle["planting_date"],
         "observation_date": observation_date,
         "weather": weather_features,
-        "ndvi": ndvi_features
+        "ndvi": {
+            "mean": ndvi_features["ndvi_mean"],
+            "min": ndvi_features["ndvi_min"],
+            "max": ndvi_features["ndvi_max"],
+            "image_count": ndvi_features["image_count"]
+        }
     }
