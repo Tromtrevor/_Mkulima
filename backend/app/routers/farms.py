@@ -9,7 +9,8 @@ from app.services.location import fetch_farm_location
 from app.services.nasa_power import get_daily_weather
 from app.services.feature_extraction import extract_weather_features
 from app.services.crop_cycle import fetch_crop_cycle
-from app.services.feature_storage import save_weather_features
+from app.services.feature_storage import save_features
+from app.services.ndvi import initialize_earth_engine, get_farm_ndvi
 
 router = APIRouter(
     prefix="/farms",
@@ -106,10 +107,25 @@ def get_crop_cycle_weather(
     )
 
     #Extract features from the weather data
-    features = extract_weather_features(weather)
+    weather_features = extract_weather_features(weather)
+
+    #Initialize Earth Engine for NDVI extraction
+    initialize_earth_engine()
+    #Fetch NDVI features from Earth Engine for the farm and crop cycle
+    ndvi_features = get_farm_ndvi(
+        db=db,
+        farm_id=farm_id,
+        observation_date=observation_date
+    )
+
+    #Combine weather and NDVI features
+    features = {
+        **weather_features,
+        **ndvi_features
+    }
 
     #Store the extracted features in the database
-    feature_id = save_weather_features(
+    feature_id = save_features(
         db=db,
         farm_id=farm_id,
         cycle_id=cycle_id,
@@ -122,6 +138,7 @@ def get_crop_cycle_weather(
         "farm_id": farm_id,
         "cycle_id": cycle_id,
         "planting_date": cycle["planting_date"],
-        "harvest_date": cycle["harvest_date"],
-        "features": features
+        "observation_date": observation_date,
+        "weather": weather_features,
+        "ndvi": ndvi_features
     }
