@@ -11,6 +11,8 @@ from app.services.feature_extraction import extract_weather_features
 from app.services.crop_cycle import fetch_crop_cycle
 from app.services.feature_storage import save_features
 from app.services.ndvi import initialize_earth_engine, get_farm_ndvi
+from app.services.soil import get_farm_soil
+
 
 router = APIRouter(
     prefix="/farms",
@@ -118,19 +120,21 @@ def get_crop_cycle_features(
         observation_date=observation_date
     )
 
-    #Combine weather and NDVI features
-    features = {
-        **weather_features,
-        **ndvi_features
-    }
+    soil_features = get_farm_soil(
+        db=db,
+        farm_id=farm_id
+    )
+
 
     #Store the extracted features in the database
     feature_id = save_features(
-        db=db,
-        farm_id=farm_id,
-        cycle_id=cycle_id,
-        observation_date=observation_date,
-        features=features
+    db=db,
+    farm_id=farm_id,
+    cycle_id=cycle_id,
+    observation_date=observation_date,
+    weather=weather_features,
+    ndvi=ndvi_features,
+    soil=soil_features,
     )
 
     return {
@@ -145,5 +149,8 @@ def get_crop_cycle_features(
             "min": ndvi_features["ndvi_min"],
             "max": ndvi_features["ndvi_max"],
             "image_count": ndvi_features["image_count"]
+        },
+        "soil":{
+            "pH": soil_features["ph"],
         }
     }
