@@ -10,6 +10,25 @@ def get_farm_soil(
     db: Session,
     farm_id: int
 ):
+    cached_soil = db.execute(
+        text("""
+            SELECT "pH"
+            FROM farm_features
+            WHERE farm_id = :farm_id
+                AND "pH" IS NOT NULL
+            ORDER BY observation_date DESC
+            LIMIT 1
+        """),
+        {"farm_id": farm_id},
+        ).mappings().first()
+
+    if cached_soil:
+        return {
+            "ph": float(cached_soil["pH"]),
+            "source": "farm_features_cache",
+            "resolution_m": 250,
+        }
+    
     result = db.execute(
         text("""
             SELECT ST_AsGeoJSON(boundary) AS boundary
