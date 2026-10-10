@@ -10,7 +10,7 @@ from app.services.nasa_power import get_daily_weather
 from app.services.feature_extraction import extract_weather_features
 from app.services.crop_cycle import fetch_crop_cycle
 from app.services.feature_storage import save_features
-from app.services.ndvi import initialize_earth_engine, get_farm_ndvi
+from app.services.ndvi import get_farm_ndvi
 from app.services.soil import get_farm_soil
 
 
@@ -111,8 +111,6 @@ def get_crop_cycle_features(
     #Extract features from the weather data
     weather_features = extract_weather_features(weather)
 
-    #Initialize Earth Engine for NDVI extraction
-    initialize_earth_engine()
     #Fetch NDVI features from Earth Engine for the farm and crop cycle
     ndvi_features = get_farm_ndvi(
         db=db,
