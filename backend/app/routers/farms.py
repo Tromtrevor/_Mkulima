@@ -123,7 +123,6 @@ def get_crop_cycle_features(
         farm_id=farm_id
     )
 
-
     #Store the extracted features in the database
     feature_id = save_features(
     db=db,
@@ -149,6 +148,11 @@ def get_crop_cycle_features(
             "image_count": ndvi_features["image_count"]
         },
         "soil":{
-            "pH": soil_features["ph"],
+            "pH": soil_features["soil_pH"],
+            "soil_clay": soil_features["soil_clay"],
+            "soil_orgC": soil_features["soil_orgC"],
+            "soil_ECEC": soil_features["soil_ECEC"],
+            "soil_rzpawhc": soil_features["soil_rzpawhc"],
+            "source": soil_features["source"],
         }
     }

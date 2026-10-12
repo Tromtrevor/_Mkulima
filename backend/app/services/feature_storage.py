@@ -27,6 +27,9 @@ def save_features(
             rainfall_mm,
             temperature,
             "pH",
+            soil_clay,
+            "soil_orgC",
+            "soil_ECEC",
             observation_date
         )
         VALUES (
@@ -38,6 +41,9 @@ def save_features(
             :rainfall_mm,
             :temperature,
             :ph,
+            :soil_clay,
+            :soil_orgC,
+            :soil_ECEC,
             :observation_date
         )
         ON CONFLICT (cycle_id, observation_date)
@@ -59,6 +65,18 @@ def save_features(
             "pH" = COALESCE(
                 EXCLUDED."pH",
                 farm_features."pH"
+            ),
+            soil_clay = COALESCE(
+                EXCLUDED.soil_clay,
+                farm_features.soil_clay
+            ),
+            "soil_orgC" = COALESCE(
+                EXCLUDED."soil_orgC",
+                farm_features."soil_orgC"
+            ),
+            "soil_ECEC" = COALESCE(
+                EXCLUDED."soil_ECEC",
+                farm_features."soil_ECEC"
             )
         RETURNING feature_id
     """)
@@ -69,12 +87,15 @@ def save_features(
             {
                 "farm_id": farm_id,
                 "cycle_id": cycle_id,
-                "ndvi_mean": ndvi["ndvi_mean"],
-                "ndvi_min": ndvi["ndvi_min"],
-                "ndvi_max": ndvi["ndvi_max"],
+                "ndvi_mean": ndvi.get("ndvi_mean"),
+                "ndvi_min": ndvi.get("ndvi_min"),
+                "ndvi_max": ndvi.get("ndvi_max"),
                 "rainfall_mm": weather["rainfall_mm"],
                 "temperature": weather["temperature_mean_c"],
-                "ph": soil["ph"],
+                "ph": soil.get("soil_pH", soil.get("ph")),
+                "soil_clay": soil.get("soil_clay"),
+                "soil_orgC": soil.get("soil_orgC"),
+                "soil_ECEC": soil.get("soil_ECEC"),
                 "observation_date": observation_date,
             },
         )

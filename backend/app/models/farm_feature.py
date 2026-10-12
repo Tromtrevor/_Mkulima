@@ -1,6 +1,6 @@
 from datetime import date
 
-from sqlalchemy import Integer, Numeric, Date, ForeignKey
+from sqlalchemy import Float, Integer, Float, Numeric, Date, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.database import Base
@@ -55,5 +55,22 @@ class FarmFeature(Base):
     cycle_id: Mapped[int] = mapped_column(
         Integer,
         ForeignKey("crop_cycles.cycle_id"),
+    )
+
+    soil_rzpawhc: Mapped[float | None] = mapped_column(
+        Float,
+        nullable=True
+    )
+
+    soil_clay: Mapped[float] = mapped_column(
+        Float
+    )
+
+    soil_orgC: Mapped[float] = mapped_column(
+        Float
+    )   
+
+    soil_ECEC: Mapped[float] = mapped_column(
+        Float
     )
 
