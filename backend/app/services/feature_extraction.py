@@ -1,6 +1,5 @@
 import pandas as pd
 
-
 def extract_weather_features(weather_data: dict) -> dict:
     parameters = weather_data["properties"]["parameter"]
     #Generate panda series for each parameter to facilitate calculations

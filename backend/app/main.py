@@ -4,6 +4,7 @@ from fastapi import FastAPI
 
 from app.routers import farms
 from app.services.ndvi import initialize_earth_engine
+from app.routers import predictions
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -18,7 +19,7 @@ app = FastAPI(
 
 
 app.include_router(farms.router)
-
+app.include_router(predictions.router)
 
 @app.get("/")
 def root():

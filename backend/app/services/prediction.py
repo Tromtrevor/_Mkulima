@@ -5,7 +5,15 @@ import joblib
 import pandas as pd
 
 
-MODEL_PATH = os.path.join("..", "ml_models", "maize_yield_baseline.joblib")
+BASE_DIR = os.path.dirname(
+    os.path.dirname(os.path.abspath(__file__))
+)
+
+MODEL_PATH = os.path.join(
+    BASE_DIR,
+    "ml_models",
+    "maize_yield_baseline.joblib",
+)
 
 FEATURES = [
     "elev",
@@ -62,3 +70,4 @@ def predict_yield(features: dict) -> dict:
         "model_version": "maize-v2",
         "features_used": FEATURES,
     }
+
