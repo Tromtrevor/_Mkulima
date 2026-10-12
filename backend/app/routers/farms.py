@@ -12,6 +12,7 @@ from app.services.crop_cycle import fetch_crop_cycle
 from app.services.feature_storage import save_features
 from app.services.ndvi import get_farm_ndvi
 from app.services.soil import get_farm_soil
+from app.services.elevation import get_farm_elevation
 
 
 router = APIRouter(
@@ -123,6 +124,11 @@ def get_crop_cycle_features(
         farm_id=farm_id
     )
 
+    elevation_features = get_farm_elevation(
+        db=db,
+        farm_id=farm_id
+    )
+
     #Store the extracted features in the database
     feature_id = save_features(
     db=db,
@@ -132,6 +138,7 @@ def get_crop_cycle_features(
     weather=weather_features,
     ndvi=ndvi_features,
     soil=soil_features,
+    elevation=elevation_features
     )
 
     return {
@@ -154,5 +161,8 @@ def get_crop_cycle_features(
             "soil_ECEC": soil_features["soil_ECEC"],
             "soil_rzpawhc": soil_features["soil_rzpawhc"],
             "source": soil_features["source"],
+        },
+        "elevation": {
+            "elevation_m": elevation_features["elevation_m"],
         }
     }

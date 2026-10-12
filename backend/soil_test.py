@@ -1,16 +1,14 @@
 
 from app.database import SessionLocal
-from app.services.ndvi import initialize_earth_engine
-from app.services.soil import get_farm_soil
+from app.services.elevation import get_farm_elevation
 
-initialize_earth_engine()
 
 db = SessionLocal()
 
 try:
-    result = get_farm_soil(
+    result = get_farm_elevation(
         db=db,
-        farm_id=1  # Use an existing farm ID
+        farm_id=1
     )
 
     print(result)

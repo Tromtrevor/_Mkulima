@@ -73,4 +73,6 @@ class FarmFeature(Base):
     soil_ECEC: Mapped[float] = mapped_column(
         Float
     )
-
+    elevation_m: Mapped[float] = mapped_column(
+        Float
+    )

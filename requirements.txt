@@ -19,3 +19,4 @@ SQLAlchemy
 psycopg[binary]
 geoalchemy2
 earthengine-api
+matplotlib

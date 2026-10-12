@@ -13,9 +13,11 @@ def save_features(
     weather: dict,
     ndvi: dict | None = None,
     soil: dict | None = None,
+    elevation: dict | None = None
 ):
     ndvi = ndvi or {}
     soil = soil or {}
+    elevation = elevation or {}
 
     query = text("""
         INSERT INTO farm_features (
@@ -30,6 +32,7 @@ def save_features(
             soil_clay,
             "soil_orgC",
             "soil_ECEC",
+            "elevation_m",
             observation_date
         )
         VALUES (
@@ -44,6 +47,7 @@ def save_features(
             :soil_clay,
             :soil_orgC,
             :soil_ECEC,
+            :elevation_m,
             :observation_date
         )
         ON CONFLICT (cycle_id, observation_date)
@@ -77,6 +81,10 @@ def save_features(
             "soil_ECEC" = COALESCE(
                 EXCLUDED."soil_ECEC",
                 farm_features."soil_ECEC"
+            ),
+            "elevation_m" = COALESCE(
+                EXCLUDED."elevation_m",
+                farm_features."elevation_m"
             )
         RETURNING feature_id
     """)
@@ -96,6 +104,7 @@ def save_features(
                 "soil_clay": soil.get("soil_clay"),
                 "soil_orgC": soil.get("soil_orgC"),
                 "soil_ECEC": soil.get("soil_ECEC"),
+                "elevation_m": elevation.get("elevation_m"),
                 "observation_date": observation_date,
             },
         )
