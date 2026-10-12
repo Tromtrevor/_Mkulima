@@ -16,13 +16,13 @@ MODEL_PATH = os.path.join(
 )
 
 FEATURES = [
-    "elev",
     "avg_season_tavg",
     "season_prec",
+    "elev",
     "soil_clay",
     "soil_pH",
-    "soil_ECEC",
     "soil_orgC",
+    "soil_ECEC",
 ]
 
 
@@ -32,7 +32,11 @@ def load_model():
             f"Maize model not found: {MODEL_PATH}"
         )
 
-    return joblib.load(MODEL_PATH)
+    artifact = joblib.load(MODEL_PATH)
+    if isinstance(artifact, dict):
+        return artifact["model"]
+
+    return artifact
 
 
 def predict_yield(features: dict) -> dict:
@@ -70,4 +74,3 @@ def predict_yield(features: dict) -> dict:
         "model_version": "maize-v2",
         "features_used": FEATURES,
     }
-
