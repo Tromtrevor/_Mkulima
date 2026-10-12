@@ -4,7 +4,7 @@ from sqlalchemy.orm import Mapped, mapped_column
 from app.database import Base
 
 class YieldPrediction(Base):
-    __tablename__ = "yield_predictions"
+    __tablename__ = "yield_prediction"
 
     prediction_id: Mapped[int] = mapped_column(
         Integer, 
