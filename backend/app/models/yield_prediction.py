@@ -18,18 +18,10 @@ class YieldPrediction(Base):
         nullable=False
     )
     
-    prediction_date: Mapped[date | None] = mapped_column(
-        Date
-    )
+    prediction_date: Mapped[date | None] = mapped_column(Date)
     
-    predicted_yield: Mapped[float | None] = mapped_column(
-        Numeric
-    )
+    predicted_yield: Mapped[float | None] = mapped_column(Numeric)
     
-    confidence: Mapped[float | None] = mapped_column(
-        Numeric
-    )
+    confidence: Mapped[float | None] = mapped_column(Numeric)
     
-    model_version: Mapped[str | None] = mapped_column(
-        String
-    )
+    model_version: Mapped[str | None] = mapped_column(String)
