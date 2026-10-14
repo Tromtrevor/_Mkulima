@@ -5,6 +5,7 @@ from datetime import date
 from app.database import get_db
 from app.models.farm import Farm
 from app.schemas.farm import FarmResponse
+from app.schemas.location import LocationResponse
 from app.services.location import fetch_farm_location
 from app.services.nasa_power import get_daily_weather
 from app.services.feature_extraction import extract_weather_features
@@ -32,7 +33,7 @@ def get_farm(farm_id: int, db: Session = Depends(get_db)):
 
     return farm
 
-@router.get("/{farm_id}/location")
+@router.get("/{farm_id}/location", response_model=LocationResponse)
 def get_farm_location(farm_id: int, db: Session = Depends(get_db)):
     location = fetch_farm_location(farm_id=farm_id, db=db)
 
