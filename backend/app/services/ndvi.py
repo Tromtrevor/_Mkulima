@@ -1,23 +1,10 @@
 
 import json
-import os
 from datetime import date, timedelta
-
 import ee
-from dotenv import load_dotenv
+
 from sqlalchemy import text
 from sqlalchemy.orm import Session
-
-load_dotenv()
-
-EE_PROJECT_ID = os.getenv("EE_PROJECT_ID")
-
-
-def initialize_earth_engine():
-    if not EE_PROJECT_ID:
-        raise ValueError("EE_PROJECT_ID is missing from .env")
-
-    ee.Initialize(project=EE_PROJECT_ID)
 
 
 def get_farm_ndvi(

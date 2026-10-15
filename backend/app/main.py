@@ -3,8 +3,9 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 from app.routers import farms
-from app.services.ndvi import initialize_earth_engine
 from app.routers import predictions
+
+from app.services.earth_engine import initialize_earth_engine
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
