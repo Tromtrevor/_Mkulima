@@ -1,6 +1,28 @@
-﻿const API_BASE_URL = 'http://localhost:8000';
+﻿import axios from 'axios'
 
-export async function fetchDashboardData() {
-  const response = await fetch(`${API_BASE_URL}/`);
-  return response.json();
-}
+const api = axios.create({
+  baseURL: import.meta.env.VITE_API_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+})
+
+export const getFarm = (farmId) =>
+  api.get(`/farms/${farmId}`)
+
+export const getFarmLocation = (farmId) =>
+  api.get(`/farms/${farmId}/location`)
+
+export const collectFarmFeatures = (farmId, cycleId, observationDate) =>
+  api.get(
+    `/farms/${farmId}/cycles/${cycleId}/features`,
+    { params: { observation_date: observationDate } }
+  )
+
+export const createPrediction = (farmId, cycleId) =>
+  api.post(`/predictions/farms/${farmId}/cycles/${cycleId}/predict`)
+
+export const getFarmPredictions = (farmId) =>
+  api.get(`/predictions/farms/${farmId}/predictions`)
+
+export default api
