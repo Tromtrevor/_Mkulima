@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date
 
 from pydantic import BaseModel
 
@@ -6,7 +6,7 @@ from pydantic import BaseModel
 class PredictionItem(BaseModel):
     prediction_id: int
     cycle_id: int
-    prediction_date: datetime 
+    prediction_date: date
     predicted_yield: float
     confidence: float | None
     model_version: str
