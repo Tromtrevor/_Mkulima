@@ -1,33 +1,35 @@
-
 import streamlit as st
-import requests
 
-# API Configuration
-API_BASE_URL = "http://localhost:8000"
+from src.components.layout import apply_app_style, render_brand
 
-# Store API base URL in session state for use in other pages
-if "api_base_url" not in st.session_state:
-    st.session_state.api_base_url = API_BASE_URL
-
-st.sidebar.title('MKULIMA')
-st.sidebar.page_link('app.py', label='Home')
-st.sidebar.page_link('pages/crop_recommendation.py', label='Crop Recommendation')   
-st.sidebar.page_link('pages/results.py', label = 'Results')
-
-# -----------------------
-# Page Setup
-# -----------------------
-st.set_page_config(page_title='MKULIMA', layout='centered')
-st.title('MKULIMA')
-    
-st.markdown('''
-Get optimum crop reccommendation based on yield prediction and soil data analysis along with available AgriServices across the country.
-\nGet started with the best Agricultural Decisions!!
-
-'''
+st.set_page_config(
+    page_title="Mkulima | Farm intelligence",
+    page_icon="🌱",
+    layout="wide",
+    initial_sidebar_state="expanded",
 )
 
+apply_app_style()
+render_brand()
 
-if st.button('GET STARTED'):
-    st.switch_page('pages/crop_recommendation.py')
+pages = [
+    st.Page(
+        "src/pages/dashboard.py",
+        title="Dashboard",
+        icon=":material/dashboard:",
+        default=True,
+    ),
+    st.Page(
+        "src/pages/farm_analysis.py",
+        title="Farm analysis",
+        icon=":material/map:",
+    ),
+    st.Page(
+        "src/pages/predictions.py",
+        title="Yield predictions",
+        icon=":material/show_chart:",
+    ),
+]
 
+navigation = st.navigation(pages, position="sidebar")
+navigation.run()
