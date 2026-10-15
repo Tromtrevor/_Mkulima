@@ -19,6 +19,9 @@ data/
 .vscode/
 .idea/
 
+#node_modules
+frontend/node_modules/
+
 # OS
 .DS_Store
 Thumbs.db
