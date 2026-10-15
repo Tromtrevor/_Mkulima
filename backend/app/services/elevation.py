@@ -4,7 +4,7 @@ import json
 import ee
 from sqlalchemy import text
 from sqlalchemy.orm import Session
-from app.services.ndvi import initialize_earth_engine
+from app.services.earth_engine import initialize_earth_engine
 
 initialize_earth_engine()
 
