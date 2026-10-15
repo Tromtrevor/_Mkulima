@@ -1,1 +1,0 @@
-from .current_data import fetch_realtime_data
