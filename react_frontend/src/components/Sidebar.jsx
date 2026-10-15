@@ -9,9 +9,9 @@
 
 const navigation = [
   { label: "Dashboard", icon: LayoutDashboard, active: true },
-  { label: "Farm analysis", icon: Map, active: false },
-  { label: "Yield predictions", icon: ChartNoAxesCombined, active: false },
-  { label: "Crop cycles", icon: Sprout, active: false },
+  { label: "Farm Analysis", icon: Map, active: false },
+  { label: "Yield Predictions", icon: ChartNoAxesCombined, active: false },
+  { label: "Crop Cycles", icon: Sprout, active: false },
 ];
 
 export default function Sidebar() {
