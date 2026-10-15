@@ -15,3 +15,7 @@ class FarmFeatureResponse(BaseModel):
 	ndvi: dict[str, Any]
 	soil: dict[str, Any]
 	elevation: dict[str, Any]
+	
+	model_config = {
+            "from_attributes": True
+        }

@@ -7,6 +7,8 @@ from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models.farm import Farm
 from app.models.crop_cycle import CropCycle
+from app.schemas.predict import PredictResponse
+from app.schemas.prediction import FarmPredictionResponse
 from app.models.yield_prediction import YieldPrediction
 from app.services.prediction import predict_yield
 from app.services.prediction_storage import save_prediction
@@ -16,7 +18,7 @@ router = APIRouter(
     tags=["Predictions"]
 )
 
-@router.post("/farms/{farm_id}/cycles/{cycle_id}/predict")
+@router.post("/farms/{farm_id}/cycles/{cycle_id}/predict", response_model=PredictResponse)
 def create_prediction(
     farm_id: int,
     cycle_id: int,
@@ -100,7 +102,7 @@ def create_prediction(
     }
 
 
-@router.get("/farms/{farm_id}/predictions")
+@router.get("/farms/{farm_id}/predictions", response_model=FarmPredictionResponse)
 def get_farm_predictions(
     farm_id: int,
     db: Session = Depends(get_db),
